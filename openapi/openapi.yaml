@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: PlayArena API
+  version: 0.0.1
+servers:
+  - url: http://localhost:3000
+paths:
+  /health:
+    get:
+      summary: Healthcheck
+      responses:
+        '200':
+          description: ok
+  /auth/otp:
+    post:
+      summary: Demander un OTP (mock)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone: { type: string }
+      responses:
+        '200': { description: sent }
+  /auth/verify:
+    post:
+      summary: Vérifier OTP (mock 123456)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone: { type: string }
+                otp: { type: string }
+      responses:
+        '200': { description: token }
+  /pitches:
+    get:
+      summary: Rechercher des terrains (mock)
+      parameters:
+        - in: query
+          name: city
+          schema: { type: string }
+        - in: query
+          name: sport
+          schema: { type: string }
+        - in: query
+          name: indoor
+          schema: { type: boolean }
+        - in: query
+          name: ac
+          schema: { type: boolean }
+      responses:
+        '200':
+          description: Liste de terrains
+  /bookings:
+    post:
+      summary: Créer une réservation (mock)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pitch_id: { type: string }
+                date: { type: string, format: date }
+                slot: { type: string, example: '18:00-19:00' }
+      responses:
+        '200':
+          description: Réservation confirmée avec QR
