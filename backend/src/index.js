@@ -1,12 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB error:', err.message));
 
 const PORT = process.env.PORT || 3000;
 
@@ -58,6 +62,15 @@ app.get('/pitches', (req, res) => {
 });
 
 // --- Démarrage ---
+app.get('/dbcheck', async (req, res) => {
+  try {
+    await mongoose.connection.db.admin().ping();
+    res.json({ mongo: true });
+  } catch (e) {
+    res.status(500).json({ mongo: false, error: String(e) });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`PlayArena API listening on :${PORT}`);
 });
