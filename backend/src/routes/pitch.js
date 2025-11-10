@@ -2,6 +2,7 @@ import express from 'express';
 import Pitch from '../models/Pitch.js';
 import Booking from '../models/Booking.js';
 const router = express.Router();
+import requireAuth from '../middleware/requireAuth.js';
 
 router.get('/', async (req, res) => {
   const pitches = await Pitch.find();
@@ -32,6 +33,13 @@ router.get('/:id/slots', async (req, res) => {
   }
 
   res.json(slots);
+});
+// Créer un terrain (protégé)
+router.post('/', requireAuth, async (req, res) => {
+  const { name, location = '' } = req.body || {};
+  if (!name) return res.status(400).json({ error: 'name required' });
+  const p = await Pitch.create({ name, location });
+  res.json(p);
 });
 
 export default router;
