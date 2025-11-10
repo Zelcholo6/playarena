@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth.js';
+import pitchRoutes from './routes/pitch.js';
+import bookingRoutes from './routes/booking.js';
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/auth', authRoutes);
+app.use('/pitches', pitchRoutes);
+app.use('/bookings', bookingRoutes);
 
 const PORT = process.env.PORT || 3000;
 
